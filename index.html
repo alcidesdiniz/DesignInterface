@@ -12,20 +12,60 @@
 
 <!-- Conteúdo principal -->
 <main>
-    <h1>Bem-vindo ao nosso site >> Moletons Drakes PG PG</h1>
-    <p>Encontre Moletons Drakes para sair no drip pro shopping de PG.</p>
+  <h1>Bem-vindo à Locadora de Veículos</h1>
+  <p>Encontre o carro ideal para sua viagem, trabalho ou lazer.</p>
 
-    <div class="Moletons">
-        <img src="https://img.irroba.com.br/fit-in/600x600/filters:format(webp):fill(fff):quality(80)/w2steaoe/catalog/api/w2steaoe_blingirr/AXI1Yn5.jpg"
-            alt="Moletons Drakes PG">
-
-        <img src="https://www.havan.com.br/media/catalog/product/cache/73a52df140c4d19dbec2b6c485ea6a50/m/o/moletom-4-a-10-anos-jet-barbie-com-glitter-mattel_531714_1.webp"
-            alt="Moletons Drakes PG">
-
-        <img src="https://lojaspompeia.vtexassets.com/arquivos/ids/879794-563-auto/10306305727601-blusa-inf-barbie-bege1.jpg.jpg?v=638768612566230000"
-            alt="Moletons Drakes Drakes">
-    </div>
+  <div id="conteudo" class="conteudo-scroll">
+    <p>Carregando conteúdo...</p>
+  </div>
 </main>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNebzLsTTv5xRJcd9IeVd1DMs6tOLUuV-jXJTXNSgZG1FWSG52ZtUSGY2AfD6qopAV/exec";; // substitua pela URL do seu Apps Script
+async function carregarConteudo() {
+  const container = document.getElementById('conteudo');
+  container.innerHTML = "<p>Carregando conteúdo...</p>";
+
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const dados = await res.json();
+    container.innerHTML = '';
+
+    dados.forEach(item => {
+      const bloco = document.createElement('div');
+      bloco.className = 'bloco-item';
+
+      const titulo = document.createElement('h2');
+      titulo.textContent = item.Título || '';
+      bloco.appendChild(titulo);
+
+      const descricao = document.createElement('p');
+      descricao.textContent = item.Descrição || '';
+      bloco.appendChild(descricao);
+
+      if (item.Url && item.Url.startsWith('http')) {
+        if (item.Url.match(/\.(jpg|jpeg|png|gif|webp)$/i) || item.Url.includes('unsplash')) {
+          const img = document.createElement('img');
+          img.src = item.Url;
+          img.alt = item.Título || 'Imagem';
+          bloco.appendChild(img);
+        } else {
+          const link = document.createElement('a');
+          link.href = item.Url;
+          link.textContent = 'Ver mais';
+          bloco.appendChild(link);
+        }
+      }
+
+      container.appendChild(bloco);
+    });
+  } catch (err) {
+    container.innerHTML = "<p>Erro ao carregar dados: " + err.message + "</p>";
+  }
+}
+
+carregarConteudo();
+</script>
 
 <!-- Rodapé -->
 <footer>
