@@ -3,20 +3,22 @@
     <h2>Moletons Drakes PG</h2>
     <nav>
         <a href="index.html">Inicio</a>
-        <a href="filiais.html">filiais</a>
+        <a href="filiais.html">Filiais</a>
         <a href="contato.html">Contato</a>
         <a href="planilha.html">Planilha</a>
         <link rel="stylesheet" href="style.css">
     </nav>
-     <div id="tema-toggle" class="tema-toggle">
-    <div class="bolinha"></div>
-  </div>
+
+    <!-- Botão de tema -->
+    <div id="tema-toggle" class="tema-toggle">
+        <div class="bolinha"></div>
+    </div>
 </header>
 
 <!-- Conteúdo principal -->
 <main>
   <h1>Bem-vindo à chuteiras PG</h1>
-  <p>chuteiras PG.</p>
+  <p>Chuteiras PG.</p>
 
   <div id="conteudo" class="conteudo-scroll">
     <p>Carregando conteúdo...</p>
@@ -24,7 +26,8 @@
 </main>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNebzLsTTv5xRJcd9IeVd1DMs6tOLUuV-jXJTXNSgZG1FWSG52ZtUSGY2AfD6qopAV/exec";; // substitua pela URL do seu Apps Script
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNebzLsTTv5xRJcd9IeVd1DMs6tOLUuV-jXJTXNSgZG1FWSG52ZtUSGY2AfD6qopAV/exec";
+
 async function carregarConteudo() {
   const container = document.getElementById('conteudo');
   container.innerHTML = "<p>Carregando conteúdo...</p>";
@@ -46,33 +49,32 @@ async function carregarConteudo() {
       descricao.textContent = item.Descrição || '';
       bloco.appendChild(descricao);
 
-      
-if (item.Url && item.Url.startsWith('http')) {
-  const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+      // Detectar mídia
+      if (item.Url && item.Url.startsWith('http')) {
+        const youtubeRegex = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/;
+        const match = item.Url.match(youtubeRegex);
 
-  const match = item.Url.match(youtubeRegex);
-  if (match) {
-    const videoId = match[1];
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${videoId}`;
-    iframe.height = "315";
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-    iframe.setAttribute("allowfullscreen", true);
-    bloco.appendChild(iframe);
-  }
-  else if (item.Url.match(/\.(jpg|jpeg|png|gif|webp)$/i) || item.Url.includes('unsplash')) {
-    const img = document.createElement('img');
-    img.src = item.Url;
-    img.alt = item.Título || 'Imagem';
-    bloco.appendChild(img);
-  }
-  else {
-    const link = document.createElement('a');
-    link.href = item.Url;
-    link.textContent = 'Ver mais';
-    bloco.appendChild(link);
-  }
-}
+        if (match) {
+          const iframe = document.createElement('iframe');
+          iframe.src = `https://www.youtube.com/embed/${match[1]}`;
+          iframe.height = "315";
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.setAttribute("allowfullscreen", true);
+          bloco.appendChild(iframe);
+
+        } else if (item.Url.match(/\.(jpg|jpeg|png|gif|webp)$/i) || item.Url.includes('unsplash')) {
+          const img = document.createElement('img');
+          img.src = item.Url;
+          img.alt = item.Título || 'Imagem';
+          bloco.appendChild(img);
+
+        } else {
+          const link = document.createElement('a');
+          link.href = item.Url;
+          link.textContent = 'Ver mais';
+          bloco.appendChild(link);
+        }
+      }
 
       container.appendChild(bloco);
     });
@@ -83,21 +85,27 @@ if (item.Url && item.Url.startsWith('http')) {
 
 carregarConteudo();
 </script>
+
+<!-- Sistema do botão de tema -->
 <script>
   const toggle = document.getElementById("tema-toggle");
-  const body = document.body;
 
   // Carregar tema salvo
-  let tema = localStorage.getItem("tema") || "tema-claro";
-  if (tema === "tema-escuro") body.classList.add("tema-escuro");
+  if (localStorage.getItem("tema") === "escuro") {
+      document.body.classList.add("tema-escuro");
+  }
 
   toggle.addEventListener("click", () => {
-    body.classList.toggle("tema-escuro");
+      document.body.classList.toggle("tema-escuro");
 
-    const ativo = body.classList.contains("tema-escuro");
-    localStorage.setItem("tema", ativo ? "tema-escuro" : "tema-claro");
+      if (document.body.classList.contains("tema-escuro")) {
+          localStorage.setItem("tema", "escuro");
+      } else {
+          localStorage.setItem("tema", "claro");
+      }
   });
 </script>
+
 <!-- Rodapé -->
 <footer>
     <p>&copy; 2025 Moletons Drakes PG - Todos os direitos reservados</p>
